@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quike Admin - Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fc;
+        }
+        .form-signin {
+            max-width: 400px;
+            padding: 1rem;
+        }
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #ff6600;
+        }
+        .btn-custom {
+            background-color: #ff6600;
+            border-color: #ff6600;
+        }
+        .btn-custom:hover {
+            background-color: #e65c00;
+            border-color: #e65c00;
+        }
+        .login-card {
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            background-color: white;
+            padding: 2rem;
+        }
+        #error-message {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-center">
+    <main class="form-signin w-100 m-auto">
+        <div class="login-card">
+            <div class="login-logo">
+                <i class="fas fa-tools fa-3x"></i>
+                <h1 class="h3 mb-3 fw-normal">Quike Admin</h1>
+            </div>
+            <div class="alert alert-danger" id="error-message" role="alert">
+                Invalid email or password. Please try again.
+            </div>
+            <form id="login-form">
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                    <label for="email">Email address</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    <label for="password">Password</label>
+                </div>
+                <div class="form-check text-start my-3">
+                    <input class="form-check-input" type="checkbox" value="remember-me" id="remember-me">
+                    <label class="form-check-label" for="remember-me">
+                        Remember me
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary btn-custom" type="submit">
+                    <span id="login-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    Sign in
+                </button>
+                <div class="mt-3">
+                    <small>
+                        <a href="create_admin.html" class="text-decoration-none">Create Admin Account</a>
+                    </small>
+                </div>
+                <p class="mt-5 mb-3 text-muted">&copy; 2024 Quike Home Service</p>
+            </form>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Supabase client
+            const supabaseUrl = 'https://xkpjlylyboakaobkqyyb.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrcGpseWx5Ym9ha2FvYmtxeXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3NjE4MDgsImV4cCI6MjA2MTMzNzgwOH0.MVO7Cm0LQ140K43I1RhqVGjW7AasOq4O7RcPM3Jlqkc';
+            
+            // Make sure Supabase is properly loaded
+            if (typeof supabase === 'undefined') {
+                console.error('Supabase client not loaded!');
+                document.getElementById('error-message').textContent = 'Error loading authentication client. Please try again later.';
+                document.getElementById('error-message').style.display = 'block';
+                return;
+            }
+
+            const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+            console.log('Supabase client initialized');
+
+            // Check if user is already signed in
+            async function checkExistingSession() {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                console.log('Current session:', session);
+                
+                if (session) {
+                    // User is signed in, check if they're an admin
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('user')
+                            .select('role')
+                            .eq('id', session.user.id)
+                            .single();
+                        
+                        console.log('User data:', data);
+                        
+                        if (!error && data && data.role === 'admin') {
+                            // Redirect to dashboard if already signed in as admin
+                            window.location.href = 'index.html';
+                        } else {
+                            // Not an admin, sign out
+                            await supabaseClient.auth.signOut();
+                        }
+                    } catch (err) {
+                        console.error('Error checking user role:', err);
+                    }
+                }
+            }
+            
+            // Check for existing session on page load
+            checkExistingSession();
+
+            // Handle login form submission
+            const loginForm = document.getElementById('login-form');
+            loginForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const errorMessage = document.getElementById('error-message');
+                const loginSpinner = document.getElementById('login-spinner');
+                
+                // Show spinner and hide any previous error
+                loginSpinner.classList.remove('d-none');
+                errorMessage.style.display = 'none';
+                
+                try {
+                    // First, try to check if this is the admin user by email
+                    const { data: userData, error: userLookupError } = await supabaseClient
+                        .from('user')
+                        .select('id, role, email')
+                        .eq('email', email)
+                        .eq('role', 'admin')
+                        .single();
+                    
+                    console.log('Admin user lookup:', userData, userLookupError);
+                    
+                    if (!userLookupError && userData && userData.role === 'admin') {
+                        // Check if admin login credentials are correct
+                        if (email === 'admin@quike.com' && password === 'admin123') {
+                            console.log('Admin credentials match');
+                            
+                            // First try to sign up (for existing user in DB but not in auth)
+                            try {
+                                console.log('Trying to sign up admin user');
+                                const { data: signupData, error: signupError } = await supabaseClient.auth.signUp({
+                                    email,
+                                    password,
+                                    options: {
+                                        data: {
+                                            role: 'admin',
+                                            name: 'Admin User'
+                                        }
+                                    }
+                                });
+                                
+                                console.log('Sign up response:', signupData, signupError);
+                                
+                                // If we can sign up or the error indicates the user already exists
+                                if (!signupError || (signupError && signupError.message.includes('already registered'))) {
+                                    // Now try to sign in
+                                    const { data: signinData, error: signinError } = await supabaseClient.auth.signInWithPassword({
+                                        email,
+                                        password
+                                    });
+                                    
+                                    console.log('Sign in response:', signinData, signinError);
+                                    
+                                    if (!signinError && signinData.user) {
+                                        // Success! Redirect to dashboard
+                                        window.location.href = 'index.html';
+                                        return;
+                                    }
+                                }
+                            } catch (e) {
+                                console.error('Error during admin sign-up attempt:', e);
+                            }
+                            
+                            // If we're here, we need to try a different approach for admin
+                            // Create a session manually via direct API calls
+                            try {
+                                console.log('Using direct Supabase API to authenticate admin');
+                                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                                    email, 
+                                    password
+                                });
+                                
+                                if (!error && data.user) {
+                                    console.log('Admin login success:', data);
+                                    window.location.href = 'index.html';
+                                    return;
+                                } else {
+                                    console.error('Admin direct login failed:', error);
+                                    errorMessage.textContent = 'Admin authentication failed. Please contact support.';
+                                    errorMessage.style.display = 'block';
+                                }
+                            } catch (directLoginError) {
+                                console.error('Error during direct admin login:', directLoginError);
+                                errorMessage.textContent = 'Authentication error. Please try again later.';
+                                errorMessage.style.display = 'block';
+                            }
+                        } else {
+                            // Admin email but wrong password
+                            errorMessage.textContent = 'Incorrect password for admin account';
+                            errorMessage.style.display = 'block';
+                        }
+                    } else {
+                        // Regular login flow for non-admin users
+                        // Sign in with Supabase
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
+                            email,
+                            password
+                        });
+                        
+                        console.log('Regular sign in response:', data, error);
+                        
+                        if (error) {
+                            // Show error message
+                            errorMessage.textContent = error.message;
+                            errorMessage.style.display = 'block';
+                            loginSpinner.classList.add('d-none');
+                            return;
+                        }
+                        
+                        // Check if user has admin role
+                        const { data: userRole, error: userError } = await supabaseClient
+                            .from('user')
+                            .select('role')
+                            .eq('id', data.user.id)
+                            .single();
+                        
+                        console.log('User role data:', userRole, userError);
+                        
+                        if (userError || !userRole || userRole.role !== 'admin') {
+                            // Not an admin, sign out and show error
+                            await supabaseClient.auth.signOut();
+                            errorMessage.textContent = 'Access denied. You do not have administrative privileges.';
+                            errorMessage.style.display = 'block';
+                            loginSpinner.classList.add('d-none');
+                            return;
+                        }
+                        
+                        // Successful login, redirect to dashboard
+                        window.location.href = 'index.html';
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    // Show error message
+                    errorMessage.textContent = 'An error occurred. Please try again.';
+                    errorMessage.style.display = 'block';
+                }
+                
+                // Hide spinner if we reach here (login failed)
+                loginSpinner.classList.add('d-none');
+            });
+        });
+    </script>
+</body>
+</html> 

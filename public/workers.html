@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quike Admin - Workers</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h3 class="text-white">Quike Admin</h3>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html" id="dashboard-link">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="workers.html" id="workers-link">
+                                <i class="fas fa-hard-hat me-2"></i>
+                                Workers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="users.html" id="users-link">
+                                <i class="fas fa-users me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="bookings.html" id="bookings-link">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Bookings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="verification.html" id="verification-link">
+                                <i class="fas fa-user-check me-2"></i>
+                                Worker Verification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="settings.html" id="settings-link">
+                                <i class="fas fa-cog me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="nav-item mt-5">
+                            <a class="nav-link text-danger" href="#" id="logout-link">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Workers Management</h1>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="admin-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-2"></i>Admin
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="admin-dropdown">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Workers Filter Section -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Filter Workers</h6>
+                    </div>
+                    <div class="card-body">
+                        <form id="worker-filter-form" class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="filter-service-category" class="form-label">Service Category</label>
+                                <select class="form-select" id="filter-service-category">
+                                    <option value="">All Categories</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="filter-verification-status" class="form-label">Verification Status</label>
+                                <select class="form-select" id="filter-verification-status">
+                                    <option value="">All Statuses</option>
+                                    <option value="verified">Verified</option>
+                                    <option value="pending">Pending Verification</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="filter-location" class="form-label">Location</label>
+                                <select class="form-select" id="filter-location">
+                                    <option value="">All Locations</option>
+                                    <option value="Kollam">Kollam</option>
+                                    <option value="Punalur">Punalur</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="filter-search" class="form-label">Search</label>
+                                <input type="text" class="form-control" id="filter-search" placeholder="Name, Email, Phone...">
+                            </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary me-2" id="reset-filter">Reset</button>
+                                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Workers Table -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">All Workers</h6>
+                        <div class="dropdown no-arrow">
+                            <button class="btn btn-sm btn-primary" id="export-workers">
+                                <i class="fas fa-download fa-sm text-white-50 me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="workers-table" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Service</th>
+                                        <th>Location</th>
+                                        <th>Verified</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="workers-table-body">
+                                    <!-- Data will be loaded dynamically -->
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <div class="loader"></div>
+                                            <p>Loading workers data...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="text-muted">
+                                Showing <span id="showing-start">0</span> to <span id="showing-end">0</span> of <span id="total-workers">0</span> workers
+                            </div>
+                            <nav aria-label="Table pagination">
+                                <ul class="pagination" id="workers-pagination">
+                                    <!-- Pagination will be added here -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Worker Detail Modal -->
+    <div class="modal fade" id="workerDetailModal" tabindex="-1" aria-labelledby="workerDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workerDetailModalLabel">Worker Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <img id="worker-profile-image" src="../assets/images/worker_placeholder.png" alt="Worker Profile" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            <h5 id="worker-modal-name">Worker Name</h5>
+                            <p id="worker-modal-service" class="badge bg-info">Service Category</p>
+                            <p id="worker-modal-verified" class="badge bg-success">Verified</p>
+                        </div>
+                        <div class="col-md-8">
+                            <h6 class="border-bottom pb-2 mb-3">Contact Information</h6>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Email:</strong> <span id="worker-modal-email"></span></p>
+                                    <p><strong>Phone:</strong> <span id="worker-modal-phone"></span></p>
+                                    <p><strong>Age:</strong> <span id="worker-modal-age"></span></p>
+                                    <p><strong>Gender:</strong> <span id="worker-modal-gender"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>House Name:</strong> <span id="worker-modal-house"></span></p>
+                                    <p><strong>Village:</strong> <span id="worker-modal-village"></span></p>
+                                    <p><strong>Taluk:</strong> <span id="worker-modal-taluk"></span></p>
+                                    <p><strong>District:</strong> <span id="worker-modal-district"></span></p>
+                                    <p><strong>Pincode:</strong> <span id="worker-modal-pincode"></span></p>
+                                </div>
+                            </div>
+                            <h6 class="border-bottom pb-2 mb-3">Professional Details</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Skills:</strong> <span id="worker-modal-skills"></span></p>
+                                    <p><strong>Experience:</strong> <span id="worker-modal-experience"></span> years</p>
+                                    <p><strong>Languages:</strong> <span id="worker-modal-languages"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Aadhar Number:</strong> <span id="worker-modal-aadhar"></span></p>
+                                    <p><strong>Job Card Number:</strong> <span id="worker-modal-jobcard"></span></p>
+                                    <p><strong>Registration Date:</strong> <span id="worker-modal-regdate"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // This script will simply load workers from admin.js
+            console.log('Workers page loaded, using admin.js for functionality.');
+            
+            // Call loadWorkers function to load the workers data when the page loads
+            if (typeof loadWorkers === 'function') {
+                loadWorkers(1, {});
+            } else {
+                console.error('loadWorkers function not found in admin.js');
+            }
+            
+            // Initialize viewWorkerDetails and verifyWorker functions in global scope
+            // so they can be called from HTML buttons
+            if (typeof window.viewWorkerDetails !== 'function') {
+                window.viewWorkerDetails = function(workerId) {
+                    // Call the function from admin.js
+                    viewWorkerDetails(workerId);
+                };
+            }
+            
+            if (typeof window.verifyWorker !== 'function') {
+                window.verifyWorker = function(workerId) {
+                    // Call the function from admin.js
+                    verifyWorker(workerId);
+                };
+            }
+            
+            if (typeof window.changePage !== 'function') {
+                window.changePage = function(page) {
+                    // Will be handled by admin.js
+                    console.log('Change page called:', page);
+                };
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quike Admin Panel</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h3 class="text-white">Quike Admin</h3>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" id="dashboard-link">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="workers-link">
+                                <i class="fas fa-hard-hat me-2"></i>
+                                Workers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="users-link">
+                                <i class="fas fa-users me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="bookings-link">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Bookings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="verification-link">
+                                <i class="fas fa-user-check me-2"></i>
+                                Worker Verification
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="settings-link">
+                                <i class="fas fa-cog me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="nav-item mt-5">
+                            <a class="nav-link text-danger" href="#" id="logout-link">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2" id="page-title">Dashboard</h1>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="admin-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-2"></i>Admin
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="admin-dropdown">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Content area - will be dynamically replaced -->
+                <div id="content-area">
+                    <!-- Dashboard section -->
+                    <div id="dashboard-content">
+                        <div class="row mb-4">
+                            <div class="col-md-3 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Total Users</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-users">0</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Total Workers</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-workers">0</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-hard-hat fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Total Bookings</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="total-bookings">0</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    Pending Verifications</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="pending-verifications">0</div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Recent Bookings</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="recent-bookings-table" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Service</th>
+                                                        <th>Status</th>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Data will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Recent Worker Verifications</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="pending-verifications-table" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Worker Name</th>
+                                                        <th>Service</th>
+                                                        <th>Verification Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Data will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Worker verification modal -->
+    <div class="modal fade" id="workerVerificationModal" tabindex="-1" aria-labelledby="workerVerificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workerVerificationModalLabel">Worker Verification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Worker Name</label>
+                                <div class="form-control" id="worker-name">-</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <div class="form-control" id="worker-email">-</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <div class="form-control" id="worker-phone">-</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Service Category</label>
+                                <div class="form-control" id="worker-service">-</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Skills</label>
+                                <div class="form-control" id="worker-skills">-</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Experience</label>
+                                <div class="form-control" id="worker-experience">-</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Aadhar Number</label>
+                                <div class="form-control" id="worker-aadhar">-</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Job Card Number</label>
+                                <div class="form-control" id="worker-job-card">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Verification Note</label>
+                        <textarea class="form-control" id="verification-note" rows="3" placeholder="Enter verification remarks"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="reject-verification">Reject</button>
+                    <button type="button" class="btn btn-success" id="approve-verification">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worker Detail Modal -->
+    <div class="modal fade" id="workerDetailModal" tabindex="-1" aria-labelledby="workerDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workerDetailModalLabel">Worker Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <img id="worker-profile-image" src="../assets/images/worker_placeholder.png" alt="Worker Profile" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            <h5 id="worker-modal-name">Worker Name</h5>
+                            <p id="worker-modal-service" class="badge bg-info">Service Category</p>
+                            <p id="worker-modal-verified" class="badge bg-success">Verified</p>
+                        </div>
+                        <div class="col-md-8">
+                            <h6 class="border-bottom pb-2 mb-3">Contact Information</h6>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Email:</strong> <span id="worker-modal-email"></span></p>
+                                    <p><strong>Phone:</strong> <span id="worker-modal-phone"></span></p>
+                                    <p><strong>Age:</strong> <span id="worker-modal-age"></span></p>
+                                    <p><strong>Gender:</strong> <span id="worker-modal-gender"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>House Name:</strong> <span id="worker-modal-house"></span></p>
+                                    <p><strong>Village:</strong> <span id="worker-modal-village"></span></p>
+                                    <p><strong>Taluk:</strong> <span id="worker-modal-taluk"></span></p>
+                                    <p><strong>District:</strong> <span id="worker-modal-district"></span></p>
+                                    <p><strong>Pincode:</strong> <span id="worker-modal-pincode"></span></p>
+                                </div>
+                            </div>
+                            <h6 class="border-bottom pb-2 mb-3">Professional Details</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Skills:</strong> <span id="worker-modal-skills"></span></p>
+                                    <p><strong>Experience:</strong> <span id="worker-modal-experience"></span> years</p>
+                                    <p><strong>Languages:</strong> <span id="worker-modal-languages"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Aadhar Number:</strong> <span id="worker-modal-aadhar"></span></p>
+                                    <p><strong>Job Card Number:</strong> <span id="worker-modal-jobcard"></span></p>
+                                    <p><strong>Registration Date:</strong> <span id="worker-modal-regdate"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../assets/js/admin.js"></script>
+</body>
+</html> 
